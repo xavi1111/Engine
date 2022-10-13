@@ -73,7 +73,7 @@ bool ModuleRender::CleanUp()
 	LOG("Destroying renderer");
 
 	//Destroy window
-	SDL_GL_DeleteContext(SDL_GL_GetCurrentContext);
+	SDL_GL_DeleteContext(context);
 
 	return true;
 }
