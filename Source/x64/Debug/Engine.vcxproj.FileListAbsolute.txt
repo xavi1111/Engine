@@ -1,3 +1,5 @@
 C:\Users\Carlos\Desktop\Engine\Source\x64\Debug\Engine.exe
 C:\Users\Carlos\Desktop\Engine\Source\x64\Debug\Engine.pdb
 C:\Users\xavierlc6\Documents\Engine\Source\x64\Debug\Engine.exe
+C:\Users\xavie\source\repos\xavi1111\Engine\Source\x64\Debug\Engine.exe
+C:\Users\xavie\source\repos\xavi1111\Engine\Source\x64\Debug\Engine.pdb
