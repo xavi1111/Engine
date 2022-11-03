@@ -4,6 +4,7 @@
 #include "glew.h"
 #include "ModuleRenderExercise.h"
 #include "ModuleProgram.h"
+#include "MathGeoLibFwd.h"
 
 ModuleRenderExercise::ModuleRenderExercise()
 {}
@@ -14,20 +15,15 @@ ModuleRenderExercise::~ModuleRenderExercise()
 
 bool ModuleRenderExercise::Init()
 {
-	LOG("Init SDL Module Render");
 	bool ret = true;
 	SDL_Init(0);
 	program = CreateProgram(App->program->vertex, App->program->fragment);
 	glGenBuffers(1, &vbo);
-	LOG(glGetError()==0 ? "true" : "false");
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	LOG(glGetError() == 0 ? "true" : "false");
 	GLfloat vertices[] = { -1, -1, 0,  1, -1, 0,  0, 1, 0 };
 	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);
-	LOG(glGetError() == 0 ? "true" : "false");
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
@@ -53,7 +49,6 @@ unsigned ModuleRenderExercise::CreateProgram(unsigned vtx_shader, unsigned frg_s
 			int written = 0;
 			char* info = (char*)malloc(len);
 			glGetProgramInfoLog(program_id, len, &written, info);
-			LOG("Program Log Info: %s", info);
 			free(info);
 		}
 	}
@@ -66,15 +61,17 @@ unsigned ModuleRenderExercise::CreateProgram(unsigned vtx_shader, unsigned frg_s
 void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	LOG(glGetError() == 0 ? "true" : "false");
 	glEnableVertexAttribArray(0);
-	LOG(glGetError() == 0 ? "true" : "false");
 	// size = 3 float per vertex
 	// stride = 0 is equivalent to stride = sizeof(float)*3
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	LOG(glGetError() == 0 ? "true" : "false");
 	glUseProgram(program);
-	LOG(glGetError() == 0 ? "true" : "false");
+	float4x4 model, view, projection;
+
+	glUniformMatrix4fv(glGetUniformLocation(program, "model"), 1, GL_TRUE, &model[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(program, "proj"), 1, GL_TRUE, &projection[0][0]);
+
 	// 1 triangle to draw = 3 vertices
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	

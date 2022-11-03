@@ -30,6 +30,7 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -68,6 +69,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ImGui">
