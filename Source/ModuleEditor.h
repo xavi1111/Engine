@@ -6,7 +6,7 @@
 class ModuleEditor : public Module
 {
 public:
-	void init();
+	bool Init();
 	update_status PreUpdate();
 	update_status Update();
 	update_status PostUpdate();
