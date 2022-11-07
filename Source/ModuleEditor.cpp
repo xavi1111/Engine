@@ -32,7 +32,7 @@ update_status ModuleEditor::Update()
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow(); 
+	//ImGui::ShowDemoWindow(); 
 	ImGui::Render();
 	ImGui::UpdatePlatformWindows();
 	ImGui::RenderPlatformWindowsDefault();

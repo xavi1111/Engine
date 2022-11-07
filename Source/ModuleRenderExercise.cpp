@@ -3,9 +3,13 @@
 #include "SDL.h"
 #include "glew.h"
 #include "ModuleRenderExercise.h"
+#include "ModuleDebugDraw.h"
 #include "ModuleProgram.h"
+#include "ModuleWindow.h"
 #include "MathGeoLib.h"
-#include "Geometry/Frustum.h"
+#include "debugdraw.h"
+#include "Frustum.h"
+
 
 ModuleRenderExercise::ModuleRenderExercise()
 {}
@@ -13,6 +17,7 @@ ModuleRenderExercise::ModuleRenderExercise()
 // Destructor
 ModuleRenderExercise::~ModuleRenderExercise()
 {}
+
 
 bool ModuleRenderExercise::Init()
 {
@@ -69,12 +74,31 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glUseProgram(program);
 	float4x4 model, view, projection;
 
-	glUniformMatrix4fv(glGetUniformLocation(program, "model"), 1, GL_TRUE, &model[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(program, "view"), 1, GL_TRUE, &view[0][0]);
-	glUniformMatrix4fv(glGetUniformLocation(program, "proj"), 1, GL_TRUE, &projection[0][0]);
+	int height = 0;
+	int width = 0;
+	SDL_GetWindowSize(App->window->window, &width, &height);
 
-	// 1 triangle to draw = 3 vertices
+	Frustum frustum;
+	frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
+	frustum.SetPos(float3(0,3,5));
+	frustum.SetFront(-float3::unitZ);
+	frustum.SetUp(float3::unitY);
+	frustum.SetViewPlaneDistances(0.1f, 100.0f);
+	frustum.SetHorizontalFovAndAspectRatio((pi / 180) * 90.0f, width/height);
+	projection = frustum.ProjectionMatrix();
+	view = frustum.ViewMatrix();// view.LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
+	model = float4x4::FromTRS(float3(2.0f, 0.0f, 0.0f),
+		float4x4::RotateZ(pi / 4.0f),
+		float3(2.0f, 1.0f, 0.0f));
+	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
+	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(0, 1, GL_TRUE, &projection[0][0]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
+	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
+	
+	App->debugDraw->Draw(view, projection, width, height);
+	// 1 triangle to draw = 3 vertices
 	
 }
 
