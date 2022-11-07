@@ -4,7 +4,8 @@
 #include "glew.h"
 #include "ModuleRenderExercise.h"
 #include "ModuleProgram.h"
-#include "MathGeoLibFwd.h"
+#include "MathGeoLib.h"
+#include "Geometry/Frustum.h"
 
 ModuleRenderExercise::ModuleRenderExercise()
 {}
