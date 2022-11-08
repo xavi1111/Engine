@@ -90,9 +90,9 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	model = float4x4::FromTRS(float3(2.0f, 0.0f, 0.0f),
 		float4x4::RotateZ(pi / 4.0f),
 		float3(2.0f, 1.0f, 0.0f));
-	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
-	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &projection[0][0]);
+	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
