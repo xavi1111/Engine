@@ -159,6 +159,7 @@
     </ClCompile>
     <ClCompile Include="ModuleDebugDraw.cpp" />
     <ClCompile Include="ModuleCamera.cpp" />
+    <ClCompile Include="ModuleTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -427,6 +428,7 @@
     <ClInclude Include="debug_draw.hpp" />
     <ClInclude Include="debugdraw.h" />
     <ClInclude Include="ModuleCamera.h" />
+    <ClInclude Include="ModuleTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ImGui">
