@@ -15,8 +15,7 @@ ModuleTexture::~ModuleTexture()
 bool ModuleTexture::Init()
 {
 	HRESULT result = E_FAIL;
-	DirectX::TexMetadata md;
-	DirectX::ScratchImage img;
+	
 	std::string image = "..\\Source\\Test-image-Baboon.ppm";
 	std::wstring wimage = std::wstring(image.begin(), image.end());
 	result = LoadFromDDSFile(wimage.c_str(), DirectX::DDS_FLAGS_NONE, &md, img);
@@ -34,9 +33,34 @@ bool ModuleTexture::Init()
 	}
 
 	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, result);
-	//glTexImage2D(GL_TEXTURE_2D, md.mipLevels, md.format, 1, 1, 0, , metaData., metaData.);
-	glActiveTexture(GL_TEXTURE_2D);
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	switch (md.format)
+	{
+	case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+	case DXGI_FORMAT_R8G8B8A8_UNORM:
+		internalFormat = GL_RGBA8;
+		format = GL_RGBA;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+	case DXGI_FORMAT_B8G8R8A8_UNORM:
+		internalFormat = GL_RGBA8;
+		format = GL_BGRA;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	case DXGI_FORMAT_B5G6R5_UNORM:
+		internalFormat = GL_RGB8;
+		format = GL_BGR;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	default:
+		assert(false && "Unsupported format");
+	}
+
+	
 	return true;
 }
 
@@ -46,7 +70,9 @@ update_status ModuleTexture::PreUpdate()
 }
 update_status ModuleTexture::Update()
 {
-	
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, md.height, md.width, 0, format, type, img.GetPixels());
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE5);
 	return UPDATE_CONTINUE;
 }
 update_status ModuleTexture::PostUpdate()

@@ -26,7 +26,12 @@ bool ModuleRenderExercise::Init()
 	program = CreateProgram(App->program->vertex, App->program->fragment);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	GLfloat vertices[] = { -1, -1, 0,  1, -1, 0,  0, 1, 0 };
+	GLfloat vertices[] = { -1, -1, 0,  1, -1, 0,  0, 1, 0 ,
+						 0.0f, 0.0f, // v0 texcoord
+						 1.0f, 0.0f, //  v1 texcoord
+						 0.5f, 1.0f //  v2 texcoord
+					};
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
@@ -93,7 +98,7 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glUniformMatrix4fv(0, 1, GL_TRUE, &projection[0][0]);
 	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
 	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	glDrawArrays(GL_QUADS, 0, 3*2);
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
 	
