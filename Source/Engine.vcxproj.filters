@@ -476,4 +476,8 @@
       <Filter>MathGeoLib\Geometry</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="shader.txt" />
+    <Text Include="vertex.txt" />
+  </ItemGroup>
 </Project>

@@ -317,6 +317,10 @@
     <None Include="MathGeoLib_Source\Math\float2.inl" />
     <None Include="MathGeoLib_Source\Math\Matrix.inl" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="shader.txt" />
+    <Text Include="vertex.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

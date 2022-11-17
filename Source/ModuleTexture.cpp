@@ -21,9 +21,11 @@ bool ModuleTexture::Init()
 	result = LoadFromDDSFile(wimage.c_str(), DirectX::DDS_FLAGS_NONE, &md, img);
 	if (FAILED(result))
 	{
+		LOG("No texture loaded--------------");
 		result = LoadFromTGAFile(wimage.c_str(), &md, img);
 		if (FAILED(result))
 		{
+			LOG("No texture loaded--------------");
 			result = LoadFromWICFile(wimage.c_str(), DirectX::WIC_FLAGS_NONE, &md, img);
 			if (FAILED(result))
 			{
@@ -35,7 +37,7 @@ bool ModuleTexture::Init()
 	glActiveTexture(GL_TEXTURE5);
 	GLuint texture;
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
+	glBindTexture(GL_TEXTURE5, texture);
 	
 	switch (md.format)
 	{
@@ -70,8 +72,8 @@ update_status ModuleTexture::PreUpdate()
 }
 update_status ModuleTexture::Update()
 {
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, md.height, md.width, 0, format, type, img.GetPixels());
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexImage2D(GL_TEXTURE5, 0, internalFormat, md.height, md.width, 0, format, type, img.GetPixels());
+	glGenerateMipmap(GL_TEXTURE5);
 	glActiveTexture(GL_TEXTURE5);
 	return UPDATE_CONTINUE;
 }
