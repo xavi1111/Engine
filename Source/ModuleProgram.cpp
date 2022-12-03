@@ -19,7 +19,7 @@ ModuleProgram::~ModuleProgram()
 
 bool ModuleProgram::Init()
 {
-	LOG("Init SDL Module Render");
+	LOG_ENGINE("Init SDL Module Render");
 	bool ret = true;
 	SDL_Init(0);
 	char* vertexData = LoadShaderSource("..\\Source\\vertex.txt");
@@ -29,7 +29,7 @@ bool ModuleProgram::Init()
 
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		LOG_ENGINE("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
@@ -70,7 +70,7 @@ unsigned ModuleProgram::CompileShader(unsigned type, const char* source)
 			int written = 0;
 			char* info = (char*)malloc(len);
 			glGetShaderInfoLog(shader_id, len, &written, info);
-			LOG("Log Info: %s", info);
+			LOG_ENGINE("Log Info: %s", info);
 			free(info);
 		}
 	}

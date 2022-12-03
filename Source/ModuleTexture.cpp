@@ -14,31 +14,7 @@ ModuleTexture::~ModuleTexture()
 
 bool ModuleTexture::Init()
 {
-	HRESULT result = E_FAIL;
-	
-	std::string image = "..\\Source\\Test-image-Baboon.ppm";
-	std::wstring wimage = std::wstring(image.begin(), image.end());
-	result = LoadFromDDSFile(wimage.c_str(), DirectX::DDS_FLAGS_NONE, &md, img);
-	if (FAILED(result))
-	{
-		LOG("No texture loaded--------------");
-		result = LoadFromTGAFile(wimage.c_str(), &md, img);
-		if (FAILED(result))
-		{
-			LOG("No texture loaded--------------");
-			result = LoadFromWICFile(wimage.c_str(), DirectX::WIC_FLAGS_NONE, &md, img);
-			if (FAILED(result))
-			{
-				LOG("No texture loaded--------------");
-			}
-		}
-	}
-
-	glActiveTexture(GL_TEXTURE5);
-	GLuint texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE5, texture);
-	
+	Load("..\\Source\\Test-image-Baboon.ppm");
 	switch (md.format)
 	{
 	case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
@@ -61,23 +37,54 @@ bool ModuleTexture::Init()
 	default:
 		assert(false && "Unsupported format");
 	}
+	//TODO
+	//result = FlipRotate(wimage.c_str(), nullptr, img);
 
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, md.height, md.width, 0, format, type, img.GetPixels());
+	glGenerateMipmap(GL_TEXTURE_2D);
 	
 	return true;
 }
 
 update_status ModuleTexture::PreUpdate()
 {
+	
 	return UPDATE_CONTINUE;
 }
 update_status ModuleTexture::Update()
 {
-	glTexImage2D(GL_TEXTURE5, 0, internalFormat, md.height, md.width, 0, format, type, img.GetPixels());
-	glGenerateMipmap(GL_TEXTURE5);
-	glActiveTexture(GL_TEXTURE5);
+
 	return UPDATE_CONTINUE;
 }
 update_status ModuleTexture::PostUpdate()
 {
 	return UPDATE_CONTINUE;
+}
+
+GLuint ModuleTexture::Load(std::string data)
+{
+	HRESULT result = E_FAIL;
+	std::wstring wimage = std::wstring(data.begin(), data.end());
+	result = LoadFromDDSFile(wimage.c_str(), DirectX::DDS_FLAGS_NONE, &md, img);
+	if (FAILED(result))
+	{
+		LOG_ENGINE("No texture loaded--------------");
+		result = LoadFromTGAFile(wimage.c_str(), &md, img);
+		if (FAILED(result))
+		{
+			LOG_ENGINE("No texture loaded--------------");
+			result = LoadFromWICFile(wimage.c_str(), DirectX::WIC_FLAGS_NONE, &md, img);
+			if (FAILED(result))
+			{
+				LOG_ENGINE("No texture loaded--------------");
+			}
+		}
+	}
+
+	glActiveTexture(GL_TEXTURE5);
+
+	glEnable(GL_TEXTURE_2D);
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	return texture;
 }

@@ -6,6 +6,9 @@
 #include "ModuleDebugDraw.h"
 #include "ModuleProgram.h"
 #include "ModuleWindow.h"
+#include "Model.h"
+#include "ModuleTexture.h"
+#include "ModuleCamera.h"
 #include "MathGeoLib.h"
 #include "debugdraw.h"
 #include "Frustum.h"
@@ -26,10 +29,20 @@ bool ModuleRenderExercise::Init()
 	program = CreateProgram(App->program->vertex, App->program->fragment);
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	GLfloat vertices[] = { -1, -1, 0,  1, -1, 0,  0, 1, 0 ,
+	GLfloat vertices[] = { 0.0f, 0.0f, 0.0f,
+							2.0f, 0.0f, 0.0f,
+							0.0f, 2.0f, 0.0f,
+							2.0f, 2.0f, 0.0f,
+							0.0f, 2.0f, 0.0f,
+							2.0f, 0.0f, 0.0f,
+
+
 						 0.0f, 0.0f, // v0 texcoord
-						 1.0f, 0.0f, //  v1 texcoord
-						 0.5f, 1.0f //  v2 texcoord
+						 1.0f, 0.0f,
+						 0.0f, 1.0f,
+						 1.0f, 1.0f,
+						 0.0f, 1.0f, //  v1 texcoord
+						 1.0f, 0.0f, //  v2 texcoord
 					};
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);
@@ -37,7 +50,7 @@ bool ModuleRenderExercise::Init()
 	{
 		ret = false;
 	}
-	
+	model.Load("");
 	return ret;
 }
 
@@ -83,21 +96,21 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	int width = 0;
 	SDL_GetWindowSize(App->window->window, &width, &height);
 
-	Frustum frustum;
-	frustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
-	frustum.SetPos(float3(0,3,5));
-	frustum.SetFront(-float3::unitZ);
-	frustum.SetUp(float3::unitY);
-	frustum.SetViewPlaneDistances(0.1f, 100.0f);
-	frustum.SetHorizontalFovAndAspectRatio((pi / 180) * 90.0f, width/height);
-	projection = frustum.ProjectionMatrix();
-	view = frustum.ViewMatrix();// view.LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
+	
+	projection = App->camera->frustum.ProjectionMatrix();
+	view = App->camera->frustum.ViewMatrix();// view.LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
 	model = float4x4::FromTRS(float3(2.0f, 0.0f, 0.0f),
-		float4x4::RotateZ(pi / 4.0f),
+		float4x4::identity,
 		float3(2.0f, 1.0f, 0.0f));
 	glUniformMatrix4fv(0, 1, GL_TRUE, &projection[0][0]);
 	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
 	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * 3));
+	glEnableVertexAttribArray(1);
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, App->texture->texture);
+
 	glDrawArrays(GL_TRIANGLES, 0, 3*2);
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
@@ -109,6 +122,12 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 
 update_status ModuleRenderExercise::Update()
 {
+	
 	RenderVBO(vbo, program);
+	return UPDATE_CONTINUE;
+}
+
+update_status ModuleRenderExercise::PostUpdate()
+{
 	return UPDATE_CONTINUE;
 }

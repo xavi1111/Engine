@@ -18,7 +18,7 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
-	LOG("Creating Renderer context");
+	LOG_ENGINE("Creating Renderer context");
 
 	//glewInit();
 
@@ -32,11 +32,11 @@ bool ModuleRender::Init()
 	// Create an OpenGL context associated with the window.
 	SDL_GL_CreateContext(App->window->window);
 	GLenum err = glewInit();
-	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
-	LOG("Vendor: %s", glGetString(GL_VENDOR));
-	LOG("Renderer: %s", glGetString(GL_RENDERER));
-	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
-	LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	LOG_ENGINE("Using Glew %s", glewGetString(GLEW_VERSION));
+	LOG_ENGINE("Vendor: %s", glGetString(GL_VENDOR));
+	LOG_ENGINE("Renderer: %s", glGetString(GL_RENDERER));
+	LOG_ENGINE("OpenGL version supported %s", glGetString(GL_VERSION));
+	LOG_ENGINE("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 	glEnable(GL_DEPTH_TEST); // Enable depth test
 	glEnable(GL_CULL_FACE); // Enable cull backward faces
 	glFrontFace(GL_CCW); // Front faces will be counter clockwise
@@ -70,7 +70,7 @@ update_status ModuleRender::PostUpdate()
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
-	LOG("Destroying renderer");
+	LOG_ENGINE("Destroying renderer");
 
 	//Destroy window
 	SDL_GL_DeleteContext(context);
