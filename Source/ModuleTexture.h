@@ -16,6 +16,7 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	GLuint Load(std::string data);
+	void GetFormat();
 
 	DirectX::TexMetadata md;
 	DirectX::ScratchImage img;

@@ -27,5 +27,5 @@ private:
 	const Uint8* keyboard = NULL;
 	GLuint vbo;
 	float4x4 model, view, projection;
-	Model model;
+	Model modelClass;
 };

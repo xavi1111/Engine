@@ -32,17 +32,22 @@ void Model::LoadMaterials(const aiScene* scene)
 		if (scene->mMaterials[i]->GetTexture(aiTextureType_DIFFUSE, 0, &file) == AI_SUCCESS)
 		{
 			materials.push_back(App->texture->Load(file.data));
+			LOG_ENGINE("Loading materials");
 		}
 	}
 }
 
 void Model::LoadMeshes(aiMesh** currentMeshes, int numOfMeshes)
 {
-	Mesh mesh;
 	for (unsigned i = 0; i < numOfMeshes; ++i)
 	{
-		mesh.LoadVBO(currentMeshes[i]);
-		mesh.LoadEBO(currentMeshes[i]);
+		Mesh* mesh = new Mesh();
+		
+		mesh->LoadVBO(currentMeshes[i]);
+		mesh->LoadEBO(currentMeshes[i]);
+		mesh->CreateVAO();
+		mesh->material_index = currentMeshes[i]->mMaterialIndex;
 		meshes.push_back(mesh);
 	}
+	LOG_ENGINE("Loading meshes");
 }

@@ -13,7 +13,7 @@ public:
 	void LoadMaterials(const aiScene* scene);
 	void LoadMeshes(aiMesh** meshes, int numOfMeshes);
 	
-	std::vector<Mesh> meshes;
+	std::vector<Mesh*> meshes;
 	std::vector<GLuint> materials;
 };
 

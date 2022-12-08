@@ -27,7 +27,8 @@ bool ModuleRenderExercise::Init()
 	bool ret = true;
 	SDL_Init(0);
 	program = CreateProgram(App->program->vertex, App->program->fragment);
-	glGenBuffers(1, &vbo);
+	modelClass.Load("..\\Source\\BakerHouse.fbx");
+	/*glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	GLfloat vertices[] = { 0.0f, 0.0f, 0.0f,
 							2.0f, 0.0f, 0.0f,
@@ -35,8 +36,6 @@ bool ModuleRenderExercise::Init()
 							2.0f, 2.0f, 0.0f,
 							0.0f, 2.0f, 0.0f,
 							2.0f, 0.0f, 0.0f,
-
-
 						 0.0f, 0.0f, // v0 texcoord
 						 1.0f, 0.0f,
 						 0.0f, 1.0f,
@@ -45,12 +44,11 @@ bool ModuleRenderExercise::Init()
 						 1.0f, 0.0f, //  v2 texcoord
 					};
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);*/
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		ret = false;
 	}
-	model.Load("");
 	return ret;
 }
 
@@ -84,7 +82,10 @@ unsigned ModuleRenderExercise::CreateProgram(unsigned vtx_shader, unsigned frg_s
 // This function must be called each frame for drawing the triangle
 void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	int height = 0;
+	int width = 0;
+	SDL_GetWindowSize(App->window->window, &width, &height);
+	/*glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);
 	// size = 3 float per vertex
 	// stride = 0 is equivalent to stride = sizeof(float)*3
@@ -92,11 +93,14 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glUseProgram(program);
 	float4x4 model, view, projection;
 
-	int height = 0;
-	int width = 0;
-	SDL_GetWindowSize(App->window->window, &width, &height);
 
 	
+
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * 3));
+	glEnableVertexAttribArray(1);
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, App->texture->texture);
+	*/
 	projection = App->camera->frustum.ProjectionMatrix();
 	view = App->camera->frustum.ViewMatrix();// view.LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
 	model = float4x4::FromTRS(float3(2.0f, 0.0f, 0.0f),
@@ -105,12 +109,6 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glUniformMatrix4fv(0, 1, GL_TRUE, &projection[0][0]);
 	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
 	glUniformMatrix4fv(2, 1, GL_TRUE, &model[0][0]);
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * 3));
-	glEnableVertexAttribArray(1);
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, App->texture->texture);
-
 	glDrawArrays(GL_TRIANGLES, 0, 3*2);
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
@@ -124,6 +122,10 @@ update_status ModuleRenderExercise::Update()
 {
 	
 	RenderVBO(vbo, program);
+	for (int i = 0; i < modelClass.meshes.size(); i++) 
+	{
+		modelClass.meshes[i]->Draw(modelClass.materials);
+	}
 	return UPDATE_CONTINUE;
 }
 
