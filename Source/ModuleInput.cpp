@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleRenderExercise.h"
 #include "ModuleCamera.h"
 #include "ModuleRender.h"
 #include "SDL.h"
@@ -44,6 +45,10 @@ update_status ModuleInput::Update()
                 if (sdlEvent.window.event == SDL_WINDOWEVENT_RESIZED || sdlEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                     App->renderer->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
                 break;
+			case SDL_DROPFILE:
+				App->exercise->LoadModel(sdlEvent.drop.file);
+
+				
         }
     }
 
@@ -69,6 +74,7 @@ update_status ModuleInput::Update()
 	else if (keyboard[SDL_SCANCODE_E]) {
 		App->camera->SetPosition(0.0, 0.01, 0.0);
 	}
+	
 	
     return UPDATE_CONTINUE;
 }

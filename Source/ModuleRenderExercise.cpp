@@ -28,23 +28,6 @@ bool ModuleRenderExercise::Init()
 	SDL_Init(0);
 	program = CreateProgram(App->program->vertex, App->program->fragment);
 	modelClass.Load("..\\Source\\BakerHouse.fbx");
-	/*glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	GLfloat vertices[] = { 0.0f, 0.0f, 0.0f,
-							2.0f, 0.0f, 0.0f,
-							0.0f, 2.0f, 0.0f,
-							2.0f, 2.0f, 0.0f,
-							0.0f, 2.0f, 0.0f,
-							2.0f, 0.0f, 0.0f,
-						 0.0f, 0.0f, // v0 texcoord
-						 1.0f, 0.0f,
-						 0.0f, 1.0f,
-						 1.0f, 1.0f,
-						 0.0f, 1.0f, //  v1 texcoord
-						 1.0f, 0.0f, //  v2 texcoord
-					};
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);*/
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		ret = false;
@@ -79,30 +62,14 @@ unsigned ModuleRenderExercise::CreateProgram(unsigned vtx_shader, unsigned frg_s
 	return program_id;
 }
 
-// This function must be called each frame for drawing the triangle
+// This function must be called each frame for drawing the matrix
 void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
 	int height = 0;
 	int width = 0;
 	SDL_GetWindowSize(App->window->window, &width, &height);
-	/*glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glEnableVertexAttribArray(0);
-	// size = 3 float per vertex
-	// stride = 0 is equivalent to stride = sizeof(float)*3
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glUseProgram(program);
-	float4x4 model, view, projection;
-
-
-	
-
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 6 * 3));
-	glEnableVertexAttribArray(1);
-	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, App->texture->texture);
-	*/
 	projection = App->camera->frustum.ProjectionMatrix();
-	view = App->camera->frustum.ViewMatrix();// view.LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
+	view = App->camera->frustum.ViewMatrix();
 	model = float4x4::FromTRS(float3(2.0f, 0.0f, 0.0f),
 		float4x4::identity,
 		float3(2.0f, 1.0f, 0.0f));
@@ -112,10 +79,13 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glDrawArrays(GL_TRIANGLES, 0, 3*2);
 	dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
 	dd::xzSquareGrid(-10, 10, 0.0f, 1.0f, dd::colors::Green);
-	App->debugDraw->Draw(view, projection, width, height);
-	
-	// 1 triangle to draw = 3 vertices
-	
+	App->debugDraw->Draw(view, projection, width, height);	
+}
+
+void ModuleRenderExercise::LoadModel(char* path) 
+{
+	modelClass.DeleteCurrentModel();
+	modelClass.Load(path);
 }
 
 update_status ModuleRenderExercise::Update()

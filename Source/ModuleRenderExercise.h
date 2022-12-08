@@ -18,6 +18,7 @@ public:
 	bool Init();
 	unsigned CreateProgram(unsigned vtx_shader, unsigned frg_shader);
 	void RenderVBO(unsigned vbo, unsigned program);
+	void LoadModel(char* path);
 	update_status Update();
 	update_status PostUpdate();
 	bool CleanUp() {return true;}

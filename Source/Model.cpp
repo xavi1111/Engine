@@ -23,6 +23,12 @@ void Model::Load(const char* file_name)
 	}
 }
 
+void Model::DeleteCurrentModel()
+{
+	meshes.clear();
+	materials.clear();
+}
+
 void Model::LoadMaterials(const aiScene* scene)
 {
 	aiString file;
