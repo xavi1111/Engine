@@ -24,7 +24,6 @@ Application::Application()
 	modules.push_back(texture = new ModuleTexture());
 	modules.push_back(exercise = new ModuleRenderExercise());
 	//modules.push_back(editor = new ModuleEditor());
-	//modules.push_back(editor = new ModuleEditor());
 }
 
 Application::~Application()

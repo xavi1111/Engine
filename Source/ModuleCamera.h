@@ -20,6 +20,7 @@ public:
 	void SetPlaneDistances();
 	void SetPosition(float x, float y, float z);
 	void SetOrientation();
+	void MoveCamera(float x, float y);
 	float4x4 GetView();
 	float4x4 GetProjection();
 	/*void LookAt(x, y, z);

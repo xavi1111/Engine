@@ -5,6 +5,7 @@
 #include "assimp/mesh.h"
 #include "assimp/texture.h"
 #include <vector>
+#include <string>
 
 class Model
 {
@@ -16,5 +17,6 @@ public:
 
 	std::vector<Mesh*> meshes;
 	std::vector<GLuint> materials;
+	std::string fbxPath;
 };
 

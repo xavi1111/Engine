@@ -61,6 +61,10 @@ void ModuleCamera::SetPosition(float x, float y, float z)
 void ModuleCamera::SetOrientation()
 {
 }
+void ModuleCamera::MoveCamera(float x, float y)
+{
+
+}
 float4x4 ModuleCamera::GetView()
 {
 	return frustum.ViewMatrix();

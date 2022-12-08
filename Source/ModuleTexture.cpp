@@ -34,9 +34,10 @@ update_status ModuleTexture::PostUpdate()
 
 GLuint ModuleTexture::Load(std::string data)
 {
+	bool error = false;
 	HRESULT result = E_FAIL;
 	std::wstring wimage = std::wstring(data.begin(), data.end());
-	LOG_ENGINE("%s", wimage.c_str());
+	LOG_ENGINE("Path: %s", wimage);
 	result = LoadFromDDSFile(wimage.c_str(), DirectX::DDS_FLAGS_NONE, &md, img);
 	if (FAILED(result))
 	{
@@ -49,27 +50,31 @@ GLuint ModuleTexture::Load(std::string data)
 			if (FAILED(result))
 			{
 				LOG_ENGINE("No WIC texture loaded--------------");
+				error = true;
 			}
 		}
 	}
-	DirectX::ScratchImage imgAux;
-	const DirectX::Image* image = img.GetImage(0, 0, 0);
-	result = FlipRotate(*image, DirectX::TEX_FR_FLIP_VERTICAL, imgAux);
-	if (FAILED(result))
-	{
-		LOG_ENGINE("Rotation failed--------------");
+	if (!error) {
+		DirectX::ScratchImage imgAux;
+		const DirectX::Image* image = img.GetImage(0, 0, 0);
+		result = FlipRotate(*image, DirectX::TEX_FR_FLIP_VERTICAL, imgAux);
+		if (FAILED(result))
+		{
+			LOG_ENGINE("Rotation failed--------------");
+		}
+		else
+		{
+			LOG_ENGINE("Rotation OK--------------");
+		}
+		GetFormat();
+		glEnable(GL_TEXTURE_2D);
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, md.height, md.width, 0, format, type, imgAux.GetPixels());
+		glGenerateMipmap(GL_TEXTURE_2D);
+		return texture;
 	}
-	else
-	{
-		LOG_ENGINE("Rotation OK--------------");
-	}
-	GetFormat();
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture);
-	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, md.height, md.width, 0, format, type, imgAux.GetPixels());
-	glGenerateMipmap(GL_TEXTURE_2D);
-	return texture;
+	return NULL;
 }
 
 void ModuleTexture::GetFormat() 

@@ -5,7 +5,8 @@
 #include "ModuleCamera.h"
 #include "ModuleRender.h"
 #include "SDL.h"
-
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
 
 ModuleInput::ModuleInput()
 {}
@@ -34,7 +35,6 @@ bool ModuleInput::Init()
 update_status ModuleInput::Update()
 {
     SDL_Event sdlEvent;
-
     while (SDL_PollEvent(&sdlEvent) != 0)
     {
         switch (sdlEvent.type)
@@ -46,7 +46,11 @@ update_status ModuleInput::Update()
                     App->renderer->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
                 break;
 			case SDL_DROPFILE:
+				LOG_ENGINE(sdlEvent.drop.file)
 				App->exercise->LoadModel(sdlEvent.drop.file);
+			case SDL_MOUSEBUTTONDOWN:
+				//if (sdlEvent.type == SDL_MOUSEMOTION)
+					App->camera->MoveCamera(sdlEvent.motion.x, sdlEvent.motion.y);
 
 				
         }
