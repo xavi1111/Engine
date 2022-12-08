@@ -27,7 +27,7 @@ bool ModuleRenderExercise::Init()
 	bool ret = true;
 	SDL_Init(0);
 	program = CreateProgram(App->program->vertex, App->program->fragment);
-	modelClass.Load("..\\Source\\BakerHouse.fbx");
+	modelClass.Load("Game\\assets\\BakerHouse.fbx");
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
 		ret = false;

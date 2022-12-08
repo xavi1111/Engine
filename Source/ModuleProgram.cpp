@@ -22,9 +22,9 @@ bool ModuleProgram::Init()
 	LOG_ENGINE("Init SDL Module Render");
 	bool ret = true;
 	SDL_Init(0);
-	char* vertexData = LoadShaderSource("..\\Source\\vertex.txt");
+	char* vertexData = LoadShaderSource("Game\\assets\\vertex.txt");
 	vertex = CompileShader(GL_VERTEX_SHADER, vertexData);
-	char* fragmentData = LoadShaderSource("..\\Source\\shader.txt");
+	char* fragmentData = LoadShaderSource("Game\\assets\\shader.txt");
 	fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentData);
 
 	if (SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)

@@ -53,7 +53,7 @@ void Model::LoadMaterials(const aiScene* scene)
 				texture = App->texture->Load(str);
 				if (texture == NULL)
 				{
-					str = "..\\Source\\Textures\\";
+					str = "Game\\assets\\";
 					path = file.data;
 					base_filename = path.substr(path.find_last_of("/\\") + 1);
 					str.append(base_filename);
